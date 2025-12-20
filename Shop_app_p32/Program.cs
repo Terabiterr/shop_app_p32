@@ -15,6 +15,10 @@ namespace Shop_app_p32
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
+            builder.Services.AddDbContext<ProductContext>(options =>
+            {
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+            });
 
             builder.Services.AddDefaultIdentity<IdentityUser>(options =>
             {
