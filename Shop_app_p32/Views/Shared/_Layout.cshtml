@@ -1,0 +1,26 @@
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    <title>@ViewBag.Title</title>
+</head>
+<body>
+    <div>
+        <ul class="list-group">
+            <li class="list-group-item">
+                <a class="btn btn-success" asp-action="Read" asp-controller="Products">Read</a>
+                <a class="btn btn-primary" asp-action="Create" asp-controller="Products">Create</a>
+                <a class="btn btn-warning" asp-action="Update" asp-controller="Products">Update</a>
+                <a class="btn btn-danger" asp-action="Delete" asp-controller="Products">Delete</a>
+                <a class="btn btn-dark" asp-action="Details" asp-controller="Products">Details</a>
+            </li>
+        </ul>
+        @RenderBody()
+    </div>
+</body>
+</html>

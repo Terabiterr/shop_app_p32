@@ -1,0 +1,35 @@
+﻿@using Shop_app_p32.Models
+@model IEnumerable<Product>
+
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Read Shop";
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Name</th>
+            <th scope="col">Price</th>
+            <th scope="col">Description</th>
+            <td>Tools</td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var product in Model)
+        {
+            <tr>
+                <td>@product.Id</td>
+                <td>@product.Name</td>
+                <td>@product.Price</td>
+                <td>@product.Description</td>
+                <td>
+                    <a class="btn btn-success" href="@Url.Action("Update", new { id = product.Id })">Update</a>
+                    <a class="btn btn-danger" href="@Url.Action("Delete", new { id = product.Id })">Delete</a>
+                    <a class="btn btn-primary" href="@Url.Action("Details", new { id = product.Id })">Details</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Shop_app_p32.DbContext;
 using Microsoft.AspNetCore.Identity;
+using Shop_app_p32.Services;
 
 namespace Shop_app_p32
 {
@@ -11,6 +12,7 @@ namespace Shop_app_p32
         {
             var builder = WebApplication.CreateBuilder(args);
             //Services
+            builder.Services.AddScoped<IServiceProduct, ServiceProduct>();
             builder.Services.AddDbContext<UserContext>(options =>
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
