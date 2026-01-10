@@ -1,4 +1,22 @@
-﻿@{
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@model Shop_app_p32.Models.Product
+@{
     Layout = "_Layout";
     ViewData["Title"] = "Create Shop";
 }
+
+<h2>Create Product</h2>
+<form>
+    <div class="form-group">
+        <label asp-for="Name">Name: </label>
+        <input asp-for="Name" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Price">Price: </label>
+        <input asp-for="Price" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Description">Description: </label>
+        <input asp-for="Name" class="form-control" />
+    </div>
+</form>
