@@ -73,13 +73,12 @@ namespace Shop_app_p32.Controllers
         public ViewResult Delete() => View();
 
         [HttpPost]
-        [ValidateAntiForgeryToken] // Validate the anti-forgery token for security
         // POST: http://localhost:[port]/products/delete/{id}
         // Handle product deletion
         public async Task<IActionResult> Delete(int id)
         {
             await _serviceProduct.DeleteAsync(id); // Delete the product asynchronously
-            return RedirectToAction(nameof(Index)); // Redirect to the product list
+            return RedirectToAction(nameof(Read)); // Redirect to the product list
         }
 
     }

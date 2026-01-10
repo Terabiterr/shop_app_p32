@@ -1,4 +1,24 @@
-﻿@{
+﻿@model Shop_app_p32.Models.Product
+@{
     Layout = "_Layout";
-    ViewData["Title"] = "Details Shop";
+    ViewData["Title"] = "Details Product";
 }
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Name</th>
+            <th scope="col">Price</th>
+            <th scope="col">Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>@Model.Id</td>
+            <td>@Model.Name</td>
+            <td>@Model.Price</td>
+            <td>@Model.Description</td>
+        </tr>
+    </tbody>
+</table>

@@ -31,6 +31,7 @@ namespace Shop_app_p32.Services
             Product? target = await GetByIdAsync(id);
             if (target == null) throw new ArgumentNullException();
             _context.Products.Remove(target);
+            await _context.SaveChangesAsync();
             return target;
         }
 
