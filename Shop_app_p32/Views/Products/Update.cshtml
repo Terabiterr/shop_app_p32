@@ -1,4 +1,27 @@
-﻿@{
+﻿@model Shop_app_p32.Models.Product
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
     Layout = "_Layout";
-    ViewData["Title"] = "Update Shop";
+    ViewData["Title"] = "Update Product";
 }
+<h2>Create Product</h2>
+
+<form asp-action="Update" asp-controller="Products" method="post">
+    <div class="form-group">
+        <label asp-for="Id">Id</label>
+        <input asp-for="Id" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Name">Name</label>
+        <input asp-for="Name" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Price">Price</label>
+        <input asp-for="Price" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Description">Description</label>
+        <textarea asp-for="Description" class="form-control"></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Update</button>
+</form>

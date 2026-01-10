@@ -54,6 +54,7 @@ namespace Shop_app_p32.Services
             if(product_update == null) throw new ArgumentNullException();
             product_update.Name = product?.Name;
             product_update.Description = product?.Description;
+            product_update.Price = product.Price;
             await _context.SaveChangesAsync();
             return product_update;
         }
