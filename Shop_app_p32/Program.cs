@@ -1,7 +1,8 @@
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Shop_app_p32.DbContext;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using Shop_app_p32.DbContext;
 using Shop_app_p32.Services;
 
 namespace Shop_app_p32
@@ -37,6 +38,12 @@ namespace Shop_app_p32
             })
             .AddRoles<IdentityRole>() // Add role management support to Identity
             .AddEntityFrameworkStores<UserContext>(); // Store Identity data in UserContext with Entity Framework
+            //builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            //.AddCookie(options =>
+            //{
+            //    options.ExpireTimeSpan = TimeSpan.FromMinutes(5); //One minute
+            //    options.SlidingExpiration = true;
+            //});
 
 
             builder.Services.AddControllersWithViews();
