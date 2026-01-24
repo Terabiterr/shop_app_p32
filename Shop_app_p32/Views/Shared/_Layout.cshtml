@@ -11,9 +11,20 @@
 </head>
 <body>
     <div>
+        @if(!User.Identity.IsAuthenticated)
+        {
+            <a class="btn btn-primary" asp-action="Register" asp-controller="Users">Register</a>
+            <a class="btn btn-success" asp-action="Auth" asp-controller="Users">Auth</a>
+        }
+        else
+        {
+            <h1>Hello, @User.Identity.Name</h1>
+            <a class="btn btn-danger" asp-action="Logout" asp-controller="Users">Logout</a>
+        }
+
         <ul class="list-group">
             <li class="list-group-item">
-                <a class="btn btn-success" asp-action="Read" asp-controller="Products">Read</a>
+                <a class="btn btn-dark" asp-action="Read" asp-controller="Products">Read</a>
             </li>
         </ul>
         @RenderBody()
