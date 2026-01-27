@@ -1,5 +1,12 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @{
+    Layout = "_Layout";
+    ViewData["Title"] = "Create Role";
 }
+<h3>Page create role</h3>
+
+<form asp-controller="Users" asp-action="CreateRole" method="post">
+    <label for="roleName">roleName:</label>
+    <input type="text" id="roleName" name="roleName" required />
+    <button type="submit">Create</button>
+</form>

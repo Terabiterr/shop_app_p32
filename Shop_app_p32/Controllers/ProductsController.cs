@@ -37,6 +37,7 @@ namespace Shop_app_p32.Controllers
         [ValidateAntiForgeryToken] // Validate the anti-forgery token for security
         // POST: http://localhost:[port]/products/create
         // Handle product creation form submission
+        [Authorize(Roles = "admin,moderator")]
         public async Task<IActionResult> Create([Bind("Id,Name,Price,Description")] Product product)
         {
             if (ModelState.IsValid) // Check if the form data is valid
@@ -48,6 +49,7 @@ namespace Shop_app_p32.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "admin,moderator")]
         public async Task<ViewResult> Update(int id)
         {
             var product = await _serviceProduct.GetByIdAsync(id);
@@ -56,6 +58,7 @@ namespace Shop_app_p32.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "admin,moderator")]
         public async Task<IActionResult> Update([Bind("Id,Name,Price,Description")] Product product)
         {
             if (ModelState.IsValid)
@@ -70,11 +73,13 @@ namespace Shop_app_p32.Controllers
         [HttpGet]
         // GET: http://localhost:[port]/products/delete
         // Display the product delete confirmation form
+        [Authorize(Roles = "admin,moderator")]
         public ViewResult Delete() => View();
 
         [HttpPost]
         // POST: http://localhost:[port]/products/delete/{id}
         // Handle product deletion
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Delete(int id)
         {
             await _serviceProduct.DeleteAsync(id); // Delete the product asynchronously
