@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Shop_app_p32.Controllers
@@ -14,8 +16,10 @@ namespace Shop_app_p32.Controllers
             _signInManager = signInManager;
             _roleManager = roleManager;
         }
+        //HTTP METHOD GET
+        //https://localhost:[port]/users/auth
         [HttpGet]
-        public IActionResult Auth()
+        public ViewResult Auth()
         {
             return View();
         }

@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Authentication.Cookies;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -38,12 +38,26 @@ namespace Shop_app_p32
             })
             .AddRoles<IdentityRole>() // Add role management support to Identity
             .AddEntityFrameworkStores<UserContext>(); // Store Identity data in UserContext with Entity Framework
-            //builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-            //.AddCookie(options =>
-            //{
-            //    options.ExpireTimeSpan = TimeSpan.FromMinutes(5); //One minute
-            //    options.SlidingExpiration = true;
-            //});
+            builder.Services.ConfigureApplicationCookie(options =>
+            {
+                options.Cookie.Name = "ShopApp.Auth";
+
+                // ⏳ життєвий цикл cookie
+                options.ExpireTimeSpan = TimeSpan.FromHours(2);
+
+                // 🔁 sliding expiration
+                options.SlidingExpiration = true;
+
+                // 🔐 безпека
+                options.Cookie.HttpOnly = true;
+                options.Cookie.SameSite = SameSiteMode.Lax;
+                options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
+
+                // 🚪 редіректи
+                options.LoginPath = "/Account/Login";
+                options.AccessDeniedPath = "/Account/Denied";
+            });
+
 
 
             builder.Services.AddControllersWithViews();
