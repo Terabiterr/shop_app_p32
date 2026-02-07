@@ -69,6 +69,8 @@ namespace Shop_app_p32
             app.UseAuthorization();
             app.UseStaticFiles();
 
+            app.MapControllers(); //API routing
+
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}"
