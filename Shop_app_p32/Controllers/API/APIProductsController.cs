@@ -1,11 +1,11 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Shop_app_p32.Models;
 using Shop_app_p32.Services;
 
 namespace Shop_app_p32.Controllers.API
 {
+    //Додати Авторизацію через JWT Bearer
+    //Додати реєстрацію
     [Route("api/[controller]")]
     [ApiController]
     public class APIProductsController : Controller
@@ -40,6 +40,26 @@ namespace Shop_app_p32.Controllers.API
             }
             await _serviceProduct.UpdateAsync(id, product);
             return Ok(Json(product));
+        }
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var result = await _serviceProduct.DeleteAsync(id);
+            if(result != null)
+            {
+                return Ok(Json(result));
+            }
+            return BadRequest(Json(new { status = 415 }));
+        }
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            var result = await _serviceProduct.GetByIdAsync(id);
+            if (result != null)
+            {
+                return Ok(Json(result));
+            }
+            return BadRequest(Json(new { status = 415 }));
         }
     }
 }

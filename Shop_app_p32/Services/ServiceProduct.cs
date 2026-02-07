@@ -20,7 +20,7 @@ namespace Shop_app_p32.Services
 
         public async Task<Product?> CreateAsync(Product? product)
         {
-            if (product == null) throw new ArgumentNullException();
+            if (product == null) return null;
             await _context.Products.AddAsync(product);
             await _context.SaveChangesAsync();
             return product;
@@ -29,7 +29,7 @@ namespace Shop_app_p32.Services
         public async Task<Product?> DeleteAsync(int id)
         {
             Product? target = await GetByIdAsync(id);
-            if (target == null) throw new ArgumentNullException();
+            if (target == null) return null;
             _context.Products.Remove(target);
             await _context.SaveChangesAsync();
             return target;
@@ -45,14 +45,13 @@ namespace Shop_app_p32.Services
         public async Task<Product?> GetByIdAsync(int id)
         {
             var product =  await _context.Products.FindAsync(id);
-            if (product == null) throw new ArgumentNullException();
             return product;
         }
 
         public async Task<Product?> UpdateAsync(int id, Product? product)
         {
             var product_update = await _context.Products.FindAsync(id);
-            if(product_update == null) throw new ArgumentNullException();
+            if (product_update == null) return null;
             product_update.Name = product?.Name;
             product_update.Description = product?.Description;
             product_update.Price = product.Price;
