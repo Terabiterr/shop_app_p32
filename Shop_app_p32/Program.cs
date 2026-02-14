@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Shop_app_p32.DbContext;
 using Shop_app_p32.Services;
+using System.Security.Claims;
+using System.Text;
 
 namespace Shop_app_p32
 {
@@ -12,69 +14,120 @@ namespace Shop_app_p32
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-            //Services
-            builder.Services.AddScoped<IServiceProduct, ServiceProduct>();
-            builder.Services.AddDbContext<UserContext>(options =>
-            {
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-            });
-            builder.Services.AddDbContext<ProductContext>(options =>
-            {
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-            });
 
+            // =========================
+            // DATABASE
+            // =========================
+            builder.Services.AddDbContext<UserContext>(options =>
+                options.UseSqlServer(
+                    builder.Configuration.GetConnectionString("DefaultConnection")));
+
+            builder.Services.AddDbContext<ProductContext>(options =>
+                options.UseSqlServer(
+                    builder.Configuration.GetConnectionString("DefaultConnection")));
+
+            // =========================
+            // SERVICES
+            // =========================
+            builder.Services.AddScoped<IServiceProduct, ServiceProduct>();
+
+            // =========================
+            // IDENTITY (COOKIE AUTH)
+            // =========================
             builder.Services.AddDefaultIdentity<IdentityUser>(options =>
             {
-                // Require email confirmation for login
-                options.SignIn.RequireConfirmedEmail = true;
+                options.SignIn.RequireConfirmedEmail = false;
 
-                // Set custom password requirements
-                options.Password.RequireDigit = false; // No digit required
-                options.Password.RequireNonAlphanumeric = false; // No special characters required
-                options.Password.RequiredLength = 4; // Minimum length of 4 characters
-                options.Password.RequireUppercase = false; // No uppercase letter required
-                options.Password.RequireLowercase = false; // No lowercase letter required
-                options.Password.RequiredUniqueChars = 0; // No unique characters required
+                options.Password.RequireDigit = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequiredLength = 4;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequiredUniqueChars = 0;
             })
-            .AddRoles<IdentityRole>() // Add role management support to Identity
-            .AddEntityFrameworkStores<UserContext>(); // Store Identity data in UserContext with Entity Framework
+            .AddRoles<IdentityRole>()
+            .AddEntityFrameworkStores<UserContext>();
+
             builder.Services.ConfigureApplicationCookie(options =>
             {
                 options.Cookie.Name = "ShopApp.Auth";
-
-                // ⏳ життєвий цикл cookie
                 options.ExpireTimeSpan = TimeSpan.FromHours(2);
-
-                // 🔁 sliding expiration
                 options.SlidingExpiration = true;
 
-                // 🔐 безпека
                 options.Cookie.HttpOnly = true;
                 options.Cookie.SameSite = SameSiteMode.Lax;
                 options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
 
-                // 🚪 редіректи
                 options.LoginPath = "/Account/Login";
                 options.AccessDeniedPath = "/Account/Denied";
             });
 
+            // =========================
+            // AUTHENTICATION (JWT)
+            // =========================
+            builder.Services.AddAuthentication()
+                .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
 
+                        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+                        ValidAudience = builder.Configuration["Jwt:Audience"],
+                        IssuerSigningKey = new SymmetricSecurityKey(
+                            Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
+
+                        RoleClaimType = ClaimTypes.Role
+                    };
+                });
+
+            // =========================
+            // AUTHORIZATION POLICY FOR API
+            // =========================
+            builder.Services.AddAuthorization(options =>
+            {
+                options.AddPolicy("ApiPolicy", policy =>
+                    policy.AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+                          .RequireAuthenticatedUser());
+            });
+
+            // =========================
+            // CORS
+            // =========================
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAll", policy =>
+                {
+                    policy.AllowAnyOrigin()
+                          .AllowAnyHeader()
+                          .AllowAnyMethod();
+                });
+            });
 
             builder.Services.AddControllersWithViews();
-            var app = builder.Build();
-            //Middlewere
 
-            app.UseRouting();
-            app.UseAuthentication();
-            app.UseAuthorization();
+            var app = builder.Build();
+
+            // =========================
+            // MIDDLEWARE
+            // =========================
             app.UseStaticFiles();
 
-            app.MapControllers(); //API routing
+            app.UseRouting();
+
+            app.UseCors("AllowAll");
+
+            app.UseAuthentication();
+            app.UseAuthorization();
+
+            app.MapControllers(); // API
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}"
-                );
+                pattern: "{controller=Home}/{action=Index}/{id?}");
 
             app.Run();
         }
