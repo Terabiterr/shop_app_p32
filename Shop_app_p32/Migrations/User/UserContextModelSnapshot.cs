@@ -3,20 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Shop_app_p32.DbContext;
 
 #nullable disable
 
-namespace Shop_app_p32.Migrations
+namespace Shop_app_p32.Migrations.User
 {
     [DbContext(typeof(UserContext))]
-    [Migration("20251213152209_InitUserContext")]
-    partial class InitUserContext
+    partial class UserContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -12,8 +12,8 @@ namespace Shop_app_p32.Services
     }
     public class ServiceProduct : IServiceProduct
     {
-        private readonly ProductContext _context;
-        public ServiceProduct(ProductContext context)
+        private readonly ShopDbContext _context;
+        public ServiceProduct(ShopDbContext context)
         {
             _context = context;
         }

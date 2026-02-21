@@ -3,10 +3,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Shop_app_p32.Migrations
+namespace Shop_app_p32.Migrations.User
 {
     /// <inheritdoc />
-    public partial class InitUserContext : Migration
+    public partial class UsersTables : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
