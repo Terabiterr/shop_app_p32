@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Shop_app_p32.DbContext;
+using Shop_app_p32.Models;
 using Shop_app_p32.Services;
 using System.Security.Claims;
 using System.Text;
@@ -18,9 +18,6 @@ namespace Shop_app_p32
             // =========================
             // DATABASE
             // =========================
-            builder.Services.AddDbContext<UserContext>(options =>
-                options.UseSqlServer(
-                    builder.Configuration.GetConnectionString("DefaultConnection")));
 
             builder.Services.AddDbContext<ShopDbContext>(options =>
                 options.UseSqlServer(
@@ -34,7 +31,7 @@ namespace Shop_app_p32
             // =========================
             // IDENTITY (COOKIE AUTH)
             // =========================
-            builder.Services.AddDefaultIdentity<IdentityUser>(options =>
+            builder.Services.AddDefaultIdentity<ShopUser>(options =>
             {
                 options.SignIn.RequireConfirmedEmail = false;
 
@@ -46,7 +43,7 @@ namespace Shop_app_p32
                 options.Password.RequiredUniqueChars = 0;
             })
             .AddRoles<IdentityRole>()
-            .AddEntityFrameworkStores<UserContext>();
+            .AddEntityFrameworkStores<ShopDbContext>();
 
             builder.Services.ConfigureApplicationCookie(options =>
             {

@@ -1,0 +1,28 @@
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+
+[Route("api/[controller]")]
+[ApiController]
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]  // Авторизация с использованием схемы JWT Bearer
+public class APICategoriesController : Controller
+{
+    private readonly ShopDbContext _context;
+
+    public APICategoriesController(ShopDbContext context)
+    {
+        _context = context;
+    }
+    [HttpPost]
+    public async Task<IActionResult> Create(Category category)
+    {
+        if (!ModelState.IsValid)
+            return View(category);
+
+        _context.Add(category);
+        await _context.SaveChangesAsync();
+
+        return Ok(category);
+    }
+}
