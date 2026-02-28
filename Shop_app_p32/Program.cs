@@ -77,7 +77,8 @@ namespace Shop_app_p32
                         IssuerSigningKey = new SymmetricSecurityKey(
                             Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
 
-                        RoleClaimType = ClaimTypes.Role
+                        RoleClaimType = ClaimTypes.Role,
+                        NameClaimType = ClaimTypes.NameIdentifier
                     };
                 });
 

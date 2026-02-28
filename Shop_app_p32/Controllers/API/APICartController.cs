@@ -4,10 +4,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Shop_app_p32.Models;
+using System.Security.Claims;
 
 [Route("api/[controller]")]
 [ApiController]
-[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]  // Авторизация с использованием схемы JWT Bearer
+[Authorize]
 public class APICartController : Controller
 {
     private readonly ShopDbContext _context;
@@ -26,6 +27,8 @@ public class APICartController : Controller
     {
         var user = await _userManager.GetUserAsync(User);
 
+        Console.WriteLine($"Username = {user.UserName}");
+
         var cart = await _context.Carts
             .Include(c => c.Items)
             .ThenInclude(i => i.Product)
@@ -34,14 +37,28 @@ public class APICartController : Controller
         return Ok(cart);
     }
 
+    /*
+     Знаходить користувача nskmrb не вказаний JWT Token
+     */
+
     [HttpPost]
     public async Task<IActionResult> AddToCart(int productId)
     {
-        var user = await _userManager.GetUserAsync(User);
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        if (userId == null)
+            return Unauthorized();
+
+        var user = await _userManager.FindByIdAsync(userId);
+
+        if (user == null)
+            return Unauthorized();
+
+        Console.WriteLine($"User Id: {user.Id}");
 
         var cart = await _context.Carts
-            .Include(c => c.Items)
-            .FirstOrDefaultAsync(c => c.UserId == user.Id);
+                    .Include(c => c.Items)
+                    .FirstOrDefaultAsync(c => c.UserId == user.Id);
 
         if (cart == null)
         {
