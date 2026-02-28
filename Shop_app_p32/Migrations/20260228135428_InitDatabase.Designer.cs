@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Shop_app_p32.Migrations
 {
     [DbContext(typeof(ShopDbContext))]
-    [Migration("20260221152432_AddOtherTables")]
-    partial class AddOtherTables
+    [Migration("20260228135428_InitDatabase")]
+    partial class InitDatabase
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

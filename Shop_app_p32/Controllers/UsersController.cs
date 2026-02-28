@@ -2,15 +2,16 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Shop_app_p32.Models;
 
 namespace Shop_app_p32.Controllers
 {
     public class UsersController : Controller
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<ShopUser> _userManager;
+        private readonly SignInManager<ShopUser> _signInManager;
         private RoleManager<IdentityRole> _roleManager;
-        public UsersController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, RoleManager<IdentityRole> roleManager)
+        public UsersController(UserManager<ShopUser> userManager, SignInManager<ShopUser> signInManager, RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -54,7 +55,7 @@ namespace Shop_app_p32.Controllers
             {
                 return BadRequest("Register Email or password error ...");
             }
-            var user = new IdentityUser
+            var user = new ShopUser
             {
                 UserName = email,
                 Email = email,

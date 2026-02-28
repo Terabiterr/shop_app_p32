@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using Shop_app_p32.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -10,13 +11,13 @@ namespace Shop_app_p32.Controllers.API
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UsersController : Controller
+    public class APIUsersController : Controller
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<ShopUser> _userManager;
+        private readonly SignInManager<ShopUser> _signInManager;
         private RoleManager<IdentityRole> _roleManager;
         private readonly IConfiguration _configuration;
-        public UsersController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration)
+        public APIUsersController(UserManager<ShopUser> userManager, SignInManager<ShopUser> signInManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -25,7 +26,7 @@ namespace Shop_app_p32.Controllers.API
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login(IdentityUser user)
+        public async Task<IActionResult> Login(ShopUser user)
         {
 
             if (!ModelState.IsValid)
@@ -47,13 +48,13 @@ namespace Shop_app_p32.Controllers.API
             return BadRequest(result);
         }
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] IdentityUser newUser)
+        public async Task<IActionResult> Register([FromBody] ShopUser newUser)
         {
             if(!ModelState.IsValid)
             {
                 return BadRequest(new { result = $"Error: model state ..." });
             }
-            var user = new IdentityUser
+            var user = new ShopUser
             {
                 UserName = newUser.UserName,
                 Email = newUser.Email,
@@ -122,7 +123,7 @@ namespace Shop_app_p32.Controllers.API
             }
             return BadRequest(result.Errors);
         }
-        private async Task<string> GenerateJwtToken(IdentityUser user)
+        private async Task<string> GenerateJwtToken(ShopUser user)
         {
             var userRoles = await _userManager.GetRolesAsync(user); // 🟢 Отримуємо ролі
 

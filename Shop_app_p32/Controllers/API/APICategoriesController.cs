@@ -18,7 +18,7 @@ public class APICategoriesController : Controller
     public async Task<IActionResult> Create(Category category)
     {
         if (!ModelState.IsValid)
-            return View(category);
+            return BadRequest("The model isn't valid ...");
 
         _context.Add(category);
         await _context.SaveChangesAsync();
