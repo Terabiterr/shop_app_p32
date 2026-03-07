@@ -41,7 +41,7 @@ public class APICartController : Controller
      Знаходить користувача nskmrb не вказаний JWT Token
      */
 
-    [HttpPost]
+    [HttpPost("{productId}")]
     public async Task<IActionResult> AddToCart(int productId)
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -63,7 +63,8 @@ public class APICartController : Controller
         if (cart == null)
         {
             cart = new Cart { UserId = user.Id };
-            _context.Carts.Add(cart);
+            await _context.Carts.AddAsync(cart);
+            await _context.SaveChangesAsync();
         }
 
         var existingItem = cart.Items

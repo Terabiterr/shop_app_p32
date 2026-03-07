@@ -1,6 +1,7 @@
 ﻿using Shop_app_p32.Models;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 public class Cart
 {
@@ -10,7 +11,7 @@ public class Cart
     public string UserId { get; set; } = null!;
 
     [ForeignKey(nameof(UserId))]
+    [JsonIgnore]
     public ShopUser User { get; set; } = null!;
-
     public ICollection<CartItem> Items { get; set; } = new List<CartItem>();
 }
