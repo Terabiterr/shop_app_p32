@@ -9,11 +9,11 @@ using Shop_app_p32.Models;
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]  // Авторизация с использованием схемы JWT Bearer
 public class APIReviewsController : Controller
 {
-    private readonly ShopDbContext _context;
+    private readonly ShopContext _context;
     private readonly UserManager<ShopUser> _userManager;
 
     public APIReviewsController(
-        ShopDbContext context,
+        ShopContext context,
         UserManager<ShopUser> userManager)
     {
         _context = context;

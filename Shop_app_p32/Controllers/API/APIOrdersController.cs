@@ -4,17 +4,18 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Shop_app_p32.Models;
+using System.Security.Claims;
 
 [Route("api/[controller]")]
 [ApiController]
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]  // Авторизация с использованием схемы JWT Bearer
 public class APIOrdersController : Controller
 {
-    private readonly ShopDbContext _context;
+    private readonly ShopContext _context;
     private readonly UserManager<ShopUser> _userManager;
 
     public APIOrdersController(
-        ShopDbContext context,
+        ShopContext context,
         UserManager<ShopUser> userManager)
     {
         _context = context;
@@ -24,7 +25,10 @@ public class APIOrdersController : Controller
     [HttpGet]
     public async Task<IActionResult> MyOrders()
     {
-        var user = await _userManager.GetUserAsync(User);
+        var user_email = User.FindFirst(ClaimTypes.Email)?.Value;
+        var user = await _userManager.FindByEmailAsync(user_email);
+
+        Console.WriteLine($"User Id: {user.Id}");
 
         var orders = await _context.Orders
             .Where(o => o.UserId == user.Id)
@@ -38,7 +42,10 @@ public class APIOrdersController : Controller
     [HttpPost]
     public async Task<IActionResult> Checkout()
     {
-        var user = await _userManager.GetUserAsync(User);
+        var user_email = User.FindFirst(ClaimTypes.Email)?.Value;
+        var user = await _userManager.FindByEmailAsync(user_email);
+
+        Console.WriteLine($"User Id: {user.Id}");
 
         var cart = await _context.Carts
             .Include(c => c.Items)

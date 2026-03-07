@@ -8,9 +8,9 @@ using Microsoft.EntityFrameworkCore;
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]  // Авторизация с использованием схемы JWT Bearer
 public class APICategoriesController : Controller
 {
-    private readonly ShopDbContext _context;
+    private readonly ShopContext _context;
 
-    public APICategoriesController(ShopDbContext context)
+    public APICategoriesController(ShopContext context)
     {
         _context = context;
     }

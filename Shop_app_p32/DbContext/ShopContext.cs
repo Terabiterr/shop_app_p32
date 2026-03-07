@@ -2,9 +2,9 @@
 using Microsoft.EntityFrameworkCore;
 using Shop_app_p32.Models;
 
-public class ShopDbContext : IdentityDbContext<ShopUser>
+public class ShopContext : IdentityDbContext<ShopUser>
 {
-    public ShopDbContext(DbContextOptions<ShopDbContext> options)
+    public ShopContext(DbContextOptions<ShopContext> options)
         : base(options) { }
 
     public DbSet<Product> Products => Set<Product>();

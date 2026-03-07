@@ -8,14 +8,14 @@ using System.Security.Claims;
 
 [Route("api/[controller]")]
 [ApiController]
-[Authorize]
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]  // Авторизация с использованием схемы JWT Bearer
 public class APICartController : Controller
 {
-    private readonly ShopDbContext _context;
+    private readonly ShopContext _context;
     private readonly UserManager<ShopUser> _userManager;
 
     public APICartController(
-        ShopDbContext context,
+        ShopContext context,
         UserManager<ShopUser> userManager)
     {
         _context = context;
@@ -25,9 +25,10 @@ public class APICartController : Controller
     [HttpGet]
     public async Task<IActionResult> Index()
     {
-        var user = await _userManager.GetUserAsync(User);
+        var user_email = User.FindFirst(ClaimTypes.Email)?.Value;
+        var user = await _userManager.FindByEmailAsync(user_email);
 
-        Console.WriteLine($"Username = {user.UserName}");
+        Console.WriteLine($"User Id: {user.Id}");
 
         var cart = await _context.Carts
             .Include(c => c.Items)
@@ -44,15 +45,8 @@ public class APICartController : Controller
     [HttpPost("{productId}")]
     public async Task<IActionResult> AddToCart(int productId)
     {
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-        if (userId == null)
-            return Unauthorized();
-
-        var user = await _userManager.FindByIdAsync(userId);
-
-        if (user == null)
-            return Unauthorized();
+        var user_email = User.FindFirst(ClaimTypes.Email)?.Value;
+        var user = await _userManager.FindByEmailAsync(user_email);
 
         Console.WriteLine($"User Id: {user.Id}");
 

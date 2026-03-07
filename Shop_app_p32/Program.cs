@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -7,27 +8,20 @@ using Shop_app_p32.Services;
 using System.Security.Claims;
 using System.Text;
 
-namespace Shop_app_p32
+
+
+namespace Shop_p412
 {
     public class Program
     {
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-
-            // =========================
-            // DATABASE
-            // =========================
-
-            builder.Services.AddDbContext<ShopDbContext>(options =>
-                options.UseSqlServer(
-                    builder.Configuration.GetConnectionString("DefaultConnection")));
-
-            // =========================
-            // SERVICES
-            // =========================
+            builder.Services.AddDbContext<ShopContext>(options =>
+            {
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+            });
             builder.Services.AddScoped<IServiceProduct, ServiceProduct>();
-
             // =========================
             // IDENTITY (COOKIE AUTH)
             // =========================
@@ -43,7 +37,7 @@ namespace Shop_app_p32
                 options.Password.RequiredUniqueChars = 0;
             })
             .AddRoles<IdentityRole>()
-            .AddEntityFrameworkStores<ShopDbContext>();
+            .AddEntityFrameworkStores<ShopContext>();
 
             builder.Services.ConfigureApplicationCookie(options =>
             {
@@ -77,8 +71,7 @@ namespace Shop_app_p32
                         IssuerSigningKey = new SymmetricSecurityKey(
                             Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
 
-                        RoleClaimType = ClaimTypes.Role,
-                        NameClaimType = ClaimTypes.NameIdentifier
+                        RoleClaimType = ClaimTypes.Role
                     };
                 });
 
@@ -106,6 +99,12 @@ namespace Shop_app_p32
             });
 
             builder.Services.AddControllersWithViews();
+            builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler =
+            System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+    });
 
             var app = builder.Build();
 
@@ -128,6 +127,8 @@ namespace Shop_app_p32
                 pattern: "{controller=Home}/{action=Index}/{id?}");
 
             app.Run();
+
+
         }
     }
 }

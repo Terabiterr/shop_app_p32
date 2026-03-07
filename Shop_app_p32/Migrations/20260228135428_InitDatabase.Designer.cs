@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Shop_app_p32.Migrations
 {
-    [DbContext(typeof(ShopDbContext))]
+    [DbContext(typeof(ShopContext))]
     [Migration("20260228135428_InitDatabase")]
     partial class InitDatabase
     {

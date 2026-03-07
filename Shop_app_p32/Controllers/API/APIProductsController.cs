@@ -10,7 +10,6 @@ namespace Shop_app_p32.Controllers.API
     //Додати реєстрацію
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]  // Авторизация с использованием схемы JWT Bearer
     public class APIProductsController : Controller
     {
         private readonly IServiceProduct _serviceProduct;
@@ -18,6 +17,7 @@ namespace Shop_app_p32.Controllers.API
         {
             _serviceProduct = serviceProduct;
         }
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]  // Авторизация с использованием схемы JWT Bearer
         [Authorize(Roles = "admin,moderator")]
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] Product product)
@@ -35,6 +35,7 @@ namespace Shop_app_p32.Controllers.API
             var products = await _serviceProduct.GetAsync();
             return Ok(Json(products));
         }
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]  // Авторизация с использованием схемы JWT Bearer
         [Authorize(Roles = "admin,moderator")]
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] Product product)
@@ -46,6 +47,7 @@ namespace Shop_app_p32.Controllers.API
             await _serviceProduct.UpdateAsync(id, product);
             return Ok(Json(product));
         }
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]  // Авторизация с использованием схемы JWT Bearer
         [Authorize(Roles = "admin,moderator")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
