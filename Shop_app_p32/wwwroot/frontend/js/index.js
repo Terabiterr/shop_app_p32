@@ -24,10 +24,21 @@ async function get_products() {
     ).then(res => {
         return res.json()
     }).then(data => {
-        //Errors!!!
         const div_products = document.getElementById("products")
-        data.forEach(product => {
-            console.log(product)
+        data.value.forEach(product => {
+        let card = `
+            <div class="card" style="width: 18rem;">
+            <img src="..." class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title">${product.name}</h5>
+                <h5 class="card-title">${product.price}</h5>
+                <h5 class="card-title">${product.quantity}</h5>
+                <p class="card-text">${product.description}</p>
+                <a href="#" class="btn btn-primary">buy</a>
+            </div>
+            </div>
+        `
+            div_products.innerHTML += card
         });
     }).catch(err => console.log(err))
 }

@@ -10,3 +10,10 @@
 #profile {
     display: none;
 }
+#products {
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    flex-direction: row;
+    gap: 20px;
+}
