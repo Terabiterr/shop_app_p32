@@ -4,6 +4,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 public class OrderItem
 {
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
 
     [Required]

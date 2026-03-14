@@ -4,6 +4,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 public class Review
 {
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
 
     [Range(1, 5)]
