@@ -6,8 +6,6 @@ using Shop_app_p32.Services;
 
 namespace Shop_app_p32.Controllers.API
 {
-    //Додати Авторизацію через JWT Bearer
-    //Додати реєстрацію
     [Route("api/[controller]")]
     [ApiController]
     public class APIProductsController : Controller

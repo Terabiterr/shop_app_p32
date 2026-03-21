@@ -26,20 +26,24 @@ async function get_products() {
     }).then(data => {
         const div_products = document.getElementById("products")
         data.value.forEach(product => {
+            console.log(product)
         let card = `
             <div class="card" style="width: 18rem;">
-            <img src="..." class="card-img-top" alt="...">
+            <img src="./img/${product.productImages[0].imageUrl}" class="card-img-top" alt="...">
             <div class="card-body">
                 <h5 class="card-title">${product.name}</h5>
                 <h5 class="card-title">${product.price}</h5>
                 <h5 class="card-title">${product.quantity}</h5>
                 <p class="card-text">${product.description}</p>
-                <a href="#" class="btn btn-primary">buy</a>
+                <button class="btn_buy" onclick="add_to_cart(${product.id})">buy</button>
             </div>
             </div>
         `
             div_products.innerHTML += card
         });
     }).catch(err => console.log(err))
+}
+async function add_to_cart(productId) {
+    alert(productId)
 }
 get_products()

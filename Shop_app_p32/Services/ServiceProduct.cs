@@ -1,4 +1,5 @@
-﻿using Shop_app_p32.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using Shop_app_p32.Models;
 
 namespace Shop_app_p32.Services
 {
@@ -37,7 +38,7 @@ namespace Shop_app_p32.Services
 
         public async Task<IEnumerable<Product?>> GetAsync()
         {
-            var products = _context.Products;
+            var products = _context.Products.Include("ProductImages");
             if (products == null) throw new ArgumentNullException();
             return products;
         }
