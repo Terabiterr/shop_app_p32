@@ -12,7 +12,35 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById("profile").style.display = 'block'
     }
 })
+
+async function getToken() {
+    const url_auth = `http://localhost:5080/api/apiusers/login`
+    return await fetch(
+        url_auth,
+        {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                Username: "admin",
+                email: 'admin@gmail.com',
+                PasswordHash: '0000'
+            })
+        }
+    ).then(response => {
+        if(!response.ok)
+            throw new Error('Fail to fetch JWT Token ...')
+        return response.json()
+    }).then(data => {
+        return data.token.result
+    })
+    .catch(err => console.log(err))
+}
+
 async function get_products() {
+    const token = await getToken()
+    console.log(token)
     await fetch(
         url_server + '/apiproducts',
         {
