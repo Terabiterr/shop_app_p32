@@ -1,0 +1,30 @@
+*, html, body {
+    padding: 0;
+    margin: 0;
+}
+body {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background: linear-gradient(rgb(204, 108, 127), rgb(105, 105, 187));
+}
+.login, .register {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 50vh;
+    width: 50vw;
+    border: 1px solid rgb(10, 1, 1);
+}
+.form_element {
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    flex-direction: column;
+    gap: 10px;
+    margin: 10px;
+}

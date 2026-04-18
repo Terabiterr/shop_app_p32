@@ -2,45 +2,20 @@ const url_server = `http://localhost:5080/api`
 document.addEventListener('DOMContentLoaded', function () {
     let username = localStorage.getItem('username')
     if (username === null) {
-        document.getElementById("register").style.display = 'block'
-        document.getElementById("login").style.display = 'block'
+        document.getElementById("auth").style.display = 'block'
     }
     else {
-        document.getElementById("register").style.display = 'none'
-        document.getElementById("login").style.display = 'none'
+        document.getElementById("auth").style.display = 'none'
         document.getElementById("cart").style.display = 'block'
         document.getElementById("profile").style.display = 'block'
     }
 })
 
-async function getToken() {
-    const url_auth = `http://localhost:5080/api/apiusers/login`
-    return await fetch(
-        url_auth,
-        {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                Username: "admin",
-                email: 'admin@gmail.com',
-                PasswordHash: '0000'
-            })
-        }
-    ).then(response => {
-        if(!response.ok)
-            throw new Error('Fail to fetch JWT Token ...')
-        return response.json()
-    }).then(data => {
-        return data.token.result
-    })
-    .catch(err => console.log(err))
+function auth_location() {
+    window.open("html/auth.html")
 }
 
 async function get_products() {
-    const token = await getToken()
-    console.log(token)
     await fetch(
         url_server + '/apiproducts',
         {
@@ -54,7 +29,6 @@ async function get_products() {
     }).then(data => {
         const div_products = document.getElementById("products")
         data.value.forEach(product => {
-            console.log(product)
         let card = `
             <div class="card" style="width: 18rem;">
             <img src="./img/${product.productImages[0].imageUrl}" class="card-img-top" alt="...">
