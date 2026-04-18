@@ -9,43 +9,47 @@
 </head>
 
 <body>
-    <div id="register">
-        <button id="btn_register">register</button>
+    <div id="register" class="btn_register_form">
+        <button id="btn_register" onclick="show_form_register()">register</button>
     </div>
-    <div id="login">
-        <button id="btn_login">login</button>
+    <div id="login" class="btn_login_form">
+        <button id="btn_login" onclick="show_form_login()">login</button>
     </div>
     <!--Form Login-->
-    <form class="login">
+    <form id="form_login" class="login">
         <div class="form_element">
             <label for="username">UserName: </label>
-            <input type="text" name="username">
+            <input id="input_login_username_id" type="text" name="username">
         </div>
         <div class="form_element">
             <label for="email">E-mail: </label>
-            <input type="text" name="email">
+            <input id="input_login_email_id" type="text" name="email">
         </div>
         <div class="form_element">
             <label for="password">Password: </label>
-            <input type="password" name="password">
+            <input id="input_login_password_id" type="password" name="password">
         </div>
-        <button id="btn_login" class="btn_login">login</button>
+        <div class="form_element">
+            <button id="btn_login" class="btn_login" onclick="login()">login</button>
+        </div>
     </form>
     <!--Form Register-->
-    <form class="register">
+    <form id="form_register" class="register">
         <div class="form_element">
             <label for="username">UserName: </label>
-            <input type="text" name="username">
+            <input id="input_register_username_id" type="text" name="username">
         </div>
         <div class="form_element">
             <label for="email">E-mail: </label>
-            <input type="text" name="email">
+            <input id="input_register_email_id" type="text" name="email">
         </div>
         <div class="form_element">
             <label for="password">Password: </label>
-            <input type="password" name="password">
+            <input id="input_register_password_id" type="password" name="password">
         </div>
-        <button id="btn_register" class="btn_register">register</button>
+        <div class="form_element">
+            <button type="button" id="btn_register" class="btn_register" onclick="register()">register</button>
+        </div>
     </form>
     <script src="../js/auth.js"></script>
 </body>

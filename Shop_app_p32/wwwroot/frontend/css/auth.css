@@ -2,6 +2,11 @@
     padding: 0;
     margin: 0;
 }
+.btn_register_form > button, .btn_login_form > button {
+    margin: 10px;
+    height: 10vh;
+    width: 15vw;
+}
 body {
     height: 100vh;
     display: flex;
@@ -22,9 +27,12 @@ body {
 .form_element {
     width: 100%;
     display: flex;
-    justify-content: space-evenly;
+    justify-content: center;
     align-items: center;
     flex-direction: column;
     gap: 10px;
     margin: 10px;
+}
+.form_element > button {
+    padding: 10px;
 }
