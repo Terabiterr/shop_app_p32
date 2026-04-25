@@ -61,12 +61,22 @@ namespace Shop_app_p32.Controllers.API
                 PasswordHash = newUser.PasswordHash,
                 EmailConfirmed = true
             };
-            var result = await _userManager.CreateAsync(user, user.PasswordHash);
-            if (result.Succeeded)
+            try
             {
-                return Ok(result);
+                var result = await _userManager.CreateAsync(user, user.PasswordHash);
+                
+                if (result.Succeeded)
+                {
+                    return Ok(result);
+                }
+
+                return BadRequest(result.Errors);
+            } 
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return BadRequest(ex.Message);
             }
-            return BadRequest(result.Errors);
         }
         [HttpGet("logout")]
         public async Task<IActionResult> Logout()

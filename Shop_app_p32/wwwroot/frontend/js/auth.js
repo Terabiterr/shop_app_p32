@@ -1,6 +1,6 @@
 const url_server = `http://localhost:5080/api`
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const form_login = document.getElementById('form_login')
     const form_register = document.getElementById('form_register')
     form_login.style.display = 'none'
@@ -25,17 +25,34 @@ function register() {
     const username = document.getElementById('input_register_username_id').value
     const email = document.getElementById('input_register_email_id').value
     const password = document.getElementById('input_register_password_id').value
-    console.log(`Username: ${username}, E-mail: ${email}, Password: ${password}`)
+    fetch(
+        url_server + '/apiusers/register',
+        {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                "UserName": username,
+                "Email": email,
+                "PasswordHash": password
+            })
+        }
+    ).then(response => {
+        if (response.ok) {
+            alert("Register successfully ...")
+        } else {
+            throw new Error(`Status: ${response.status}, message: ${response.statusText}`)
+        }
+    }).catch(err => alert(err))
 }
 
-function login() {
-
-}
-
-async function getToken(username, email, password) {
-    const url_auth = `http://localhost:5080/api/apiusers/login`
-    return await fetch(
-        url_auth,
+async function login() {
+        const username = document.getElementById('input_login_username_id').value
+        const email = document.getElementById('input_login_email_id').value
+        const password = document.getElementById('input_login_password_id').value
+    fetch(
+        url_server + `/apiusers/login`,
         {
             method: 'POST',
             headers: {
@@ -48,11 +65,13 @@ async function getToken(username, email, password) {
             })
         }
     ).then(response => {
-        if(!response.ok)
+        if (!response.ok)
             throw new Error('Fail to fetch JWT Token ...')
         return response.json()
     }).then(data => {
-        return data.token.result
+        localStorage.setItem("token", data.token.result)
+        alert("Login success ...")
+        //window.location.href = "/"
     })
-    .catch(err => console.log(err))
+        .catch(err => console.log(err))
 }
