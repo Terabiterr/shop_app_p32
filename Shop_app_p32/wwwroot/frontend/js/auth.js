@@ -35,7 +35,7 @@ function register() {
             body: JSON.stringify({
                 "UserName": username,
                 "Email": email,
-                "PasswordHash": password
+                "Password": password
             })
         }
     ).then(response => {
@@ -48,30 +48,32 @@ function register() {
 }
 
 async function login() {
-        const username = document.getElementById('input_login_username_id').value
-        const email = document.getElementById('input_login_email_id').value
-        const password = document.getElementById('input_login_password_id').value
-    fetch(
-        url_server + `/apiusers/login`,
-        {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                Username: username,
-                email: email,
-                PasswordHash: password
-            })
-        }
-    ).then(response => {
-        if (!response.ok)
-            throw new Error('Fail to fetch JWT Token ...')
-        return response.json()
-    }).then(data => {
-        localStorage.setItem("token", data.token.result)
-        alert("Login success ...")
-        //window.location.href = "/"
+    const email = document.getElementById('input_login_email_id').value
+    const password = document.getElementById('input_login_password_id').value
+
+    fetch(url_server + '/apiusers/login', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            Email: email,
+            Password: password
+        })
     })
-        .catch(err => console.log(err))
+    .then(response => {
+        if (!response.ok)
+            throw new Error(`Error: ${response.status}`)
+        return response.json()
+    })
+    .then(data => {
+        console.log(data)
+
+        // ✅ правильне збереження токена
+        localStorage.setItem("token", data.token)
+
+        alert("Login success ...")
+        // window.location.href = "/"
+    })
+    .catch(err => console.log(err))
 }

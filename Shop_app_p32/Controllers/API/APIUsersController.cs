@@ -26,57 +26,80 @@ namespace Shop_app_p32.Controllers.API
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login(ShopUser user)
+        public async Task<IActionResult> Login([FromBody] LoginModel model)
         {
-
             if (!ModelState.IsValid)
             {
-                return BadRequest(new { result = $"Error: model state ..." });
+                return BadRequest(ModelState);
             }
-            Console.WriteLine($"Username: {user.UserName}, email: {user.Email}, password: {user.PasswordHash}");
-            var result = await _signInManager.PasswordSignInAsync(
-                    user.Email,
-                    user.PasswordHash,
-                    isPersistent: true,
-                    lockoutOnFailure: false
-                );
-            if(result.Succeeded)
+
+            // 🔍 шукаємо користувача по email
+            var user = await _userManager.FindByEmailAsync(model.Email);
+
+            if (user == null)
             {
-                var _token = GenerateJwtToken(user);
-                return Ok(new { token = _token });
+                return BadRequest("User not found");
             }
-            return BadRequest(result);
+
+            // 🔐 перевірка пароля
+            var result = await _signInManager.PasswordSignInAsync(
+                user.UserName,      // ⚠️ Identity працює через UserName
+                model.Password,
+                isPersistent: false,
+                lockoutOnFailure: false
+            );
+
+            if (!result.Succeeded)
+            {
+                return BadRequest("Invalid email or password");
+            }
+
+            // 🎟️ генеруємо JWT
+            var token = await GenerateJwtToken(user);
+
+            return Ok(new
+            {
+                token = token,
+                email = user.Email,
+                userName = user.UserName
+            });
         }
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] ShopUser newUser)
+        public async Task<IActionResult> Register([FromBody] RegisterModel model)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                return BadRequest(new { result = $"Error: model state ..." });
+                return BadRequest(ModelState);
             }
+
+            // 🔍 перевірка чи існує email
+            var existingUser = await _userManager.FindByEmailAsync(model.Email);
+            if (existingUser != null)
+            {
+                return BadRequest("User with this email already exists");
+            }
+
+            // 👤 створення користувача
             var user = new ShopUser
             {
-                UserName = newUser.UserName,
-                Email = newUser.Email,
-                PasswordHash = newUser.PasswordHash,
+                UserName = model.Username,
+                Email = model.Email,
                 EmailConfirmed = true
             };
-            try
-            {
-                var result = await _userManager.CreateAsync(user, user.PasswordHash);
-                
-                if (result.Succeeded)
-                {
-                    return Ok(result);
-                }
 
-                return BadRequest(result.Errors);
-            } 
-            catch (Exception ex)
+            // 🔐 створення з паролем (Identity сам хешує!)
+            var result = await _userManager.CreateAsync(user, model.Password);
+
+            if (result.Succeeded)
             {
-                Console.WriteLine(ex.Message);
-                return BadRequest(ex.Message);
+                return Ok(new
+                {
+                    message = "User registered successfully"
+                });
             }
+
+            // ❌ якщо помилки (наприклад пароль слабкий)
+            return BadRequest(result.Errors);
         }
         [HttpGet("logout")]
         public async Task<IActionResult> Logout()
