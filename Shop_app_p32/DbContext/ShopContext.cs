@@ -15,6 +15,7 @@ public class ShopContext : IdentityDbContext<ShopUser>
     public DbSet<OrderItem> OrderItems => Set<OrderItem>();
     public DbSet<Review> Reviews => Set<Review>();
     public DbSet<ProductImage> ProductImages => Set<ProductImage>();
+    public DbSet<UserImage> UserImages => Set<UserImage>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

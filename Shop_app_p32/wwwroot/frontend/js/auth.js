@@ -61,19 +61,59 @@ async function login() {
             Password: password
         })
     })
-    .then(response => {
-        if (!response.ok)
-            throw new Error(`Error: ${response.status}`)
-        return response.json()
-    })
-    .then(data => {
-        console.log(data)
+        .then(response => {
+            if (!response.ok)
+                throw new Error(`Error: ${response.status}`)
+            return response.json()
+        })
+        .then(data => {
+            console.log(data)
 
-        // ✅ правильне збереження токена
-        localStorage.setItem("token", data.token)
+            // ✅ правильне збереження токена
+            localStorage.setItem("token", data.token)
+            //Додати адресу головної сторінки фронтенда
+            //window.location.href = "/"
+            const user = parseUserFromToken(data.token)
+            /*
+                {
+                username: "admin@gmail.com",
+                email: "admin@gmail.com",
+                role: "admin"
+                }
+            */
+            if (!user.username && !user.email && !user.role) {
+                throw new Error('Login error ... [!username]')
+                return
+            }
+            alert(`Hello: ${user.username}`)
+            localStorage.setItem('username', user.username)
+            localStorage.setItem('email', user.email)
+            localStorage.setItem('role', user.role)
+        })
+        .catch(err => console.log(err))
+}
 
-        alert("Login success ...")
-        // window.location.href = "/"
-    })
-    .catch(err => console.log(err))
+function parseUserFromToken(token) {
+    try {
+        const payloadBase64 = token.split('.')[1];
+
+        // декодуємо base64 (підтримка unicode)
+        const payloadJson = decodeURIComponent(
+            atob(payloadBase64)
+                .split('')
+                .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+                .join('')
+        );
+
+        const payload = JSON.parse(payloadJson);
+
+        return {
+            username: payload["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"] || null,
+            email: payload["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"] || null,
+            role: payload["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] || null
+        };
+    } catch (e) {
+        console.error("Invalid token", e);
+        return null;
+    }
 }

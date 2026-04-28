@@ -3,13 +3,27 @@ document.addEventListener('DOMContentLoaded', function () {
     let username = localStorage.getItem('username')
     if (username === null) {
         document.getElementById("auth").style.display = 'block'
+        const nikname_user = document.getElementById('nikname_user')
+        nikname_user.style.display = 'none'
+        localStorage.clear()
+        const logout = document.getElementById('logout').style.display = 'none'
     }
     else {
         document.getElementById("auth").style.display = 'none'
         document.getElementById("cart").style.display = 'block'
         document.getElementById("profile").style.display = 'block'
+        const nikname_user = document.getElementById('nikname_user')
+        nikname_user.textContent = localStorage.getItem('username')
+        nikname_user.style.display = 'block'
+        const logout = document.getElementById('logout').style.display = 'block'
     }
 })
+
+function logout() {
+    const btn_logout = document.getElementById('btn_logout').style.display = 'block'
+    localStorage.clear()
+    window.location.reload()
+}
 
 function auth_location() {
     window.open("html/auth.html")
