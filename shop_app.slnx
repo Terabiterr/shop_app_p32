@@ -1,3 +1,4 @@
 <Solution>
   <Project Path="Shop_app_p32/Shop_app_p32.csproj" />
+  <Project Path="TestShopProject/TestShopProject.csproj" Id="9818e393-5404-4af3-897c-38edfea7d5f1" />
 </Solution>
