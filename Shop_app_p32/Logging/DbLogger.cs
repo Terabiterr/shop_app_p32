@@ -22,6 +22,8 @@ namespace Shop_app_p32.Logging
 
         public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception? exception, Func<TState, Exception?, string> formatter)
         {
+            var message = formatter(state, exception);
+            if (string.IsNullOrEmpty(message)) return;
             using var scope = _serviceProvider.CreateScope();
             var db_context = scope.ServiceProvider.GetRequiredService<ShopContext>();
             var logEntry = new Log
@@ -29,7 +31,7 @@ namespace Shop_app_p32.Logging
                 Message = formatter(state, exception),
                 Level = logLevel.ToString(),
                 Timestamp = DateTime.UtcNow,
-                Exception = exception.StackTrace
+                Exception = exception?.ToString() ?? exception?.StackTrace
             };
 
             db_context.Logs.Add(logEntry);

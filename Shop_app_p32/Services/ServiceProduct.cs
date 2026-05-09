@@ -14,16 +14,20 @@ namespace Shop_app_p32.Services
     public class ServiceProduct : IServiceProduct
     {
         private readonly ShopContext _context;
-        public ServiceProduct(ShopContext context)
+        private readonly ILogger<ServiceProduct> _logger;
+        public ServiceProduct(ShopContext context, ILogger<ServiceProduct> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         public async Task<Product?> CreateAsync(Product? product)
         {
             if (product == null) return null;
+            _logger.LogInformation($"Attempt add product: {product.Name}");
             await _context.Products.AddAsync(product);
             await _context.SaveChangesAsync();
+            _logger.LogInformation($"The product added successfully ... Name: {product.Name}");
             return product;
         }
 

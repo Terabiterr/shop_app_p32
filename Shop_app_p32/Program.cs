@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Shop_app_p32.Logging;
 using Shop_app_p32.Models;
 using Shop_app_p32.Services;
 using System.Security.Claims;
@@ -105,6 +106,11 @@ namespace Shop_p412
         options.JsonSerializerOptions.ReferenceHandler =
             System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
     });
+
+            //Logs
+            builder.Logging.ClearProviders();
+            builder.Logging.AddConsole();
+            builder.Logging.AddProvider(new DbLoggerProvider(builder.Services.BuildServiceProvider()));
 
             var app = builder.Build();
 

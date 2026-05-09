@@ -3,6 +3,18 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Shop_app_p32.Models
 {
+
+    /*
+     Таблицю логів потрібно додати вручну без міграцій
+    CREATE TABLE Logs (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    Exception NVARCHAR(MAX) NULL,
+    Level NVARCHAR(50) NULL,
+    Message NVARCHAR(MAX) NULL,
+    Properties NVARCHAR(MAX) NULL,
+    Timestamp DATETIME2 NOT NULL
+);
+     */
     public class Log
     {
         [Key]
