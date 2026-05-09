@@ -11,9 +11,11 @@ namespace Shop_app_p32.Controllers.API
     public class APIProductsController : Controller
     {
         private readonly IServiceProduct _serviceProduct;
-        public APIProductsController(IServiceProduct serviceProduct)
+        private readonly ILogger<APIProductsController> _logger;
+        public APIProductsController(IServiceProduct serviceProduct, ILogger<APIProductsController> logger)
         {
             _serviceProduct = serviceProduct;
+            _logger = logger;
         }
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]  // Авторизация с использованием схемы JWT Bearer
         [Authorize(Roles = "admin,moderator")]
