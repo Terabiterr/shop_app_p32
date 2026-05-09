@@ -17,7 +17,8 @@ namespace Shop_app_p32.Logging
 
         public bool IsEnabled(LogLevel logLevel)
         {
-            throw new NotImplementedException();
+            //Write log to DB when Error or Cretical Error
+            return logLevel >= LogLevel.Warning;
         }
 
         public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception? exception, Func<TState, Exception?, string> formatter)

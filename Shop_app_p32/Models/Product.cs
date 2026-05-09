@@ -31,4 +31,7 @@ namespace Shop_app_p32.Models
         public ICollection<Review>? Reviews { get; set; }
         public ICollection<ProductImage>? ProductImages { get; set; }
     }
+    //Додати товар через адмінку в браузері
+    //Продемонструвати логи успішного додавання товару в магазин
+
 }
